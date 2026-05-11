@@ -1,0 +1,56 @@
+[
+  {
+    "id": "2025-09-12-ethiopia-yirgacheffe",
+    "date": "2025-09-12",
+    "countryCode": "ETH",
+    "region": "Yirgacheffe",
+    "beanName": "Yirgacheffe Konga G1",
+    "roaster": "Onibus Coffee",
+    "grams": 200,
+    "process": "washed",
+    "notes": "華やかなレモンとベルガモット"
+  },
+  {
+    "id": "2025-10-03-colombia-huila",
+    "date": "2025-10-03",
+    "countryCode": "COL",
+    "region": "Huila",
+    "beanName": "La Esperanza",
+    "roaster": "Glitch Coffee",
+    "grams": 150,
+    "process": "washed",
+    "notes": "オレンジとミルクチョコレート"
+  },
+  {
+    "id": "2025-11-21-kenya-nyeri",
+    "date": "2025-11-21",
+    "countryCode": "KEN",
+    "region": "Nyeri",
+    "beanName": "Karogoto AA",
+    "roaster": "Fuglen Coffee Roasters",
+    "grams": 250,
+    "process": "washed",
+    "notes": "ブラックカラント、強い酸"
+  },
+  {
+    "id": "2026-01-08-guatemala-huehuetenango",
+    "date": "2026-01-08",
+    "countryCode": "GTM",
+    "region": "Huehuetenango",
+    "beanName": "El Injerto",
+    "roaster": "Light Up Coffee",
+    "grams": 200,
+    "process": "washed"
+  },
+  {
+    "id": "2026-03-15-indonesia-sumatra",
+    "date": "2026-03-15",
+    "countryCode": "IDN",
+    "region": "Sumatra Mandheling",
+    "beanName": "Lintong",
+    "roaster": "丸山珈琲",
+    "grams": 300,
+    "process": "other",
+    "notes": "スマトラ式、土っぽさとハーブ"
+  }
+]
