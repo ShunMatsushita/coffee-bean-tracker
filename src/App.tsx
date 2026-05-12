@@ -38,7 +38,8 @@ function App() {
     return () => clearTimeout(t);
   }, [toast]);
 
-  const purchases = useLiveQuery(() => db.purchases.toArray(), []) ?? [];
+  const purchasesData = useLiveQuery(() => db.purchases.toArray(), []);
+  const purchases = useMemo(() => purchasesData ?? [], [purchasesData]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
