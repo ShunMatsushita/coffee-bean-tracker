@@ -41,6 +41,27 @@ function App() {
   const purchasesData = useLiveQuery(() => db.purchases.toArray(), []);
   const purchases = useMemo(() => purchasesData ?? [], [purchasesData]);
 
+  const suggestions = useMemo(() => {
+    const distinctSorted = (pick: (p: Purchase) => string | undefined) => {
+      const counts = new Map<string, number>();
+      for (const p of purchases) {
+        const raw = pick(p);
+        const v = raw?.trim();
+        if (!v) continue;
+        counts.set(v, (counts.get(v) ?? 0) + 1);
+      }
+      return [...counts.entries()]
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .map(([v]) => v);
+    };
+    return {
+      roasters: distinctSorted((p) => p.roaster),
+      beanNames: distinctSorted((p) => p.beanName),
+      varieties: distinctSorted((p) => p.variety),
+      farms: distinctSorted((p) => p.farm),
+    };
+  }, [purchases]);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     let result = purchases.filter((p) => {
@@ -256,6 +277,7 @@ function App() {
       >
         <PurchaseForm
           initial={editing ?? undefined}
+          suggestions={suggestions}
           onSubmit={handleSubmit}
           onCancel={() => {
             setShowForm(false);

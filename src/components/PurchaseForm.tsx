@@ -64,13 +64,28 @@ function fromPurchase(p: Purchase): PurchaseFormValues {
   };
 }
 
+export interface PurchaseSuggestions {
+  roasters: string[];
+  beanNames: string[];
+  varieties: string[];
+  farms: string[];
+}
+
 interface Props {
   initial?: Purchase;
+  suggestions?: PurchaseSuggestions;
   onSubmit: (values: PurchaseFormValues) => void | Promise<void>;
   onCancel: () => void;
 }
 
-export function PurchaseForm({ initial, onSubmit, onCancel }: Props) {
+const EMPTY_SUGGESTIONS: PurchaseSuggestions = {
+  roasters: [],
+  beanNames: [],
+  varieties: [],
+  farms: [],
+};
+
+export function PurchaseForm({ initial, suggestions = EMPTY_SUGGESTIONS, onSubmit, onCancel }: Props) {
   const [values, setValues] = useState<PurchaseFormValues>(() =>
     initial ? fromPurchase(initial) : empty(),
   );
@@ -174,6 +189,8 @@ export function PurchaseForm({ initial, onSubmit, onCancel }: Props) {
           type="text"
           className="input"
           placeholder="Konga G1 など"
+          list="suggest-bean-names"
+          autoComplete="off"
           value={values.beanName}
           onChange={(e) => update("beanName", e.target.value)}
           required
@@ -185,6 +202,8 @@ export function PurchaseForm({ initial, onSubmit, onCancel }: Props) {
           type="text"
           className="input"
           placeholder="Onibus Coffee など"
+          list="suggest-roasters"
+          autoComplete="off"
           value={values.roaster}
           onChange={(e) => update("roaster", e.target.value)}
           required
@@ -258,6 +277,8 @@ export function PurchaseForm({ initial, onSubmit, onCancel }: Props) {
               type="text"
               className="input"
               placeholder="Geisha, SL28 など"
+              list="suggest-varieties"
+              autoComplete="off"
               value={values.variety}
               onChange={(e) => update("variety", e.target.value)}
             />
@@ -268,6 +289,8 @@ export function PurchaseForm({ initial, onSubmit, onCancel }: Props) {
               type="text"
               className="input"
               placeholder="Hambela Estate など"
+              list="suggest-farms"
+              autoComplete="off"
               value={values.farm}
               onChange={(e) => update("farm", e.target.value)}
             />
@@ -299,7 +322,23 @@ export function PurchaseForm({ initial, onSubmit, onCancel }: Props) {
           {initial ? "更新する" : "追加する"}
         </button>
       </div>
+
+      <SuggestionList id="suggest-roasters" values={suggestions.roasters} />
+      <SuggestionList id="suggest-bean-names" values={suggestions.beanNames} />
+      <SuggestionList id="suggest-varieties" values={suggestions.varieties} />
+      <SuggestionList id="suggest-farms" values={suggestions.farms} />
     </form>
+  );
+}
+
+function SuggestionList({ id, values }: { id: string; values: string[] }) {
+  if (values.length === 0) return null;
+  return (
+    <datalist id={id}>
+      {values.map((v) => (
+        <option key={v} value={v} />
+      ))}
+    </datalist>
   );
 }
 
