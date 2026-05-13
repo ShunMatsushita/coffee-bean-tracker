@@ -69,10 +69,28 @@ function App() {
   }, [purchases, query, filterCountry, filterProcess, sort]);
 
   const handleSubmit = async (values: PurchaseFormValues) => {
+    const optionalNumber = (s: string): number | undefined => {
+      const trimmed = s.trim();
+      if (!trimmed) return undefined;
+      const n = Number(trimmed);
+      return Number.isFinite(n) ? n : undefined;
+    };
     const payload = {
-      ...values,
+      date: values.date,
+      countryCode: values.countryCode,
       region: values.region.trim() || undefined,
+      beanName: values.beanName.trim(),
+      roaster: values.roaster.trim(),
+      grams: values.grams,
+      process: values.process,
       notes: values.notes.trim() || undefined,
+      roastLevel: values.roastLevel || undefined,
+      roastDate: values.roastDate || undefined,
+      price: optionalNumber(values.price),
+      variety: values.variety.trim() || undefined,
+      farm: values.farm.trim() || undefined,
+      altitude: optionalNumber(values.altitude),
+      rating: values.rating > 0 ? values.rating : undefined,
     };
     if (editing) {
       await updatePurchase(editing.id, payload);
