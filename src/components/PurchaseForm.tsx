@@ -1,5 +1,11 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { PROCESS_OPTIONS, type Process, type Purchase } from "../types/purchase";
+import {
+  PROCESS_OPTIONS,
+  ROAST_LEVEL_OPTIONS,
+  type Process,
+  type Purchase,
+  type RoastLevel,
+} from "../types/purchase";
 import { COFFEE_COUNTRIES } from "../utils/countries";
 
 export interface PurchaseFormValues {
@@ -11,6 +17,13 @@ export interface PurchaseFormValues {
   grams: number;
   process: Process;
   notes: string;
+  roastLevel: RoastLevel | "";
+  roastDate: string;
+  price: string;
+  variety: string;
+  farm: string;
+  altitude: string;
+  rating: number;
 }
 
 const empty = (): PurchaseFormValues => ({
@@ -22,6 +35,13 @@ const empty = (): PurchaseFormValues => ({
   grams: 200,
   process: "washed",
   notes: "",
+  roastLevel: "",
+  roastDate: "",
+  price: "",
+  variety: "",
+  farm: "",
+  altitude: "",
+  rating: 0,
 });
 
 function fromPurchase(p: Purchase): PurchaseFormValues {
@@ -34,20 +54,55 @@ function fromPurchase(p: Purchase): PurchaseFormValues {
     grams: p.grams,
     process: p.process,
     notes: p.notes ?? "",
+    roastLevel: p.roastLevel ?? "",
+    roastDate: p.roastDate ?? "",
+    price: p.price != null ? String(p.price) : "",
+    variety: p.variety ?? "",
+    farm: p.farm ?? "",
+    altitude: p.altitude != null ? String(p.altitude) : "",
+    rating: p.rating ?? 0,
   };
+}
+
+export interface PurchaseSuggestions {
+  roasters: string[];
+  beanNames: string[];
+  varieties: string[];
+  farms: string[];
 }
 
 interface Props {
   initial?: Purchase;
+  suggestions?: PurchaseSuggestions;
   onSubmit: (values: PurchaseFormValues) => void | Promise<void>;
   onCancel: () => void;
 }
 
-export function PurchaseForm({ initial, onSubmit, onCancel }: Props) {
+const EMPTY_SUGGESTIONS: PurchaseSuggestions = {
+  roasters: [],
+  beanNames: [],
+  varieties: [],
+  farms: [],
+};
+
+export function PurchaseForm({ initial, suggestions = EMPTY_SUGGESTIONS, onSubmit, onCancel }: Props) {
   const [values, setValues] = useState<PurchaseFormValues>(() =>
     initial ? fromPurchase(initial) : empty(),
   );
   const [submitting, setSubmitting] = useState(false);
+  const [showDetail, setShowDetail] = useState(() =>
+    initial
+      ? Boolean(
+          initial.roastLevel ??
+            initial.roastDate ??
+            initial.price ??
+            initial.variety ??
+            initial.farm ??
+            initial.altitude ??
+            initial.rating,
+        )
+      : false,
+  );
 
   useEffect(() => {
     setValues(initial ? fromPurchase(initial) : empty());
@@ -134,6 +189,8 @@ export function PurchaseForm({ initial, onSubmit, onCancel }: Props) {
           type="text"
           className="input"
           placeholder="Konga G1 など"
+          list="suggest-bean-names"
+          autoComplete="off"
           value={values.beanName}
           onChange={(e) => update("beanName", e.target.value)}
           required
@@ -145,11 +202,109 @@ export function PurchaseForm({ initial, onSubmit, onCancel }: Props) {
           type="text"
           className="input"
           placeholder="Onibus Coffee など"
+          list="suggest-roasters"
+          autoComplete="off"
           value={values.roaster}
           onChange={(e) => update("roaster", e.target.value)}
           required
         />
       </div>
+
+      <div className="sm:col-span-2">
+        <button
+          type="button"
+          className="text-xs font-medium text-coffee-600 hover:text-coffee-700 dark:text-coffee-200 dark:hover:text-coffee-100"
+          onClick={() => setShowDetail((s) => !s)}
+          aria-expanded={showDetail}
+        >
+          {showDetail ? "▾ 詳細を隠す" : "▸ 詳細を入力する（焙煎度・価格・評価など）"}
+        </button>
+      </div>
+
+      {showDetail && (
+        <>
+          <div className="sm:col-span-1">
+            <label className="label">焙煎度</label>
+            <select
+              className="input"
+              value={values.roastLevel}
+              onChange={(e) => update("roastLevel", e.target.value as RoastLevel | "")}
+            >
+              <option value="">未設定</option>
+              {ROAST_LEVEL_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="sm:col-span-1">
+            <label className="label">焙煎日</label>
+            <input
+              type="date"
+              className="input"
+              value={values.roastDate}
+              onChange={(e) => update("roastDate", e.target.value)}
+            />
+          </div>
+          <div className="sm:col-span-1">
+            <label className="label">価格（円）</label>
+            <input
+              type="number"
+              min={0}
+              inputMode="numeric"
+              className="input"
+              placeholder="1800"
+              value={values.price}
+              onChange={(e) => update("price", e.target.value)}
+            />
+          </div>
+          <div className="sm:col-span-1">
+            <label className="label">標高 (m)</label>
+            <input
+              type="number"
+              min={0}
+              inputMode="numeric"
+              className="input"
+              placeholder="1800"
+              value={values.altitude}
+              onChange={(e) => update("altitude", e.target.value)}
+            />
+          </div>
+          <div className="sm:col-span-1">
+            <label className="label">品種</label>
+            <input
+              type="text"
+              className="input"
+              placeholder="Geisha, SL28 など"
+              list="suggest-varieties"
+              autoComplete="off"
+              value={values.variety}
+              onChange={(e) => update("variety", e.target.value)}
+            />
+          </div>
+          <div className="sm:col-span-1">
+            <label className="label">農園 / 生産者</label>
+            <input
+              type="text"
+              className="input"
+              placeholder="Hambela Estate など"
+              list="suggest-farms"
+              autoComplete="off"
+              value={values.farm}
+              onChange={(e) => update("farm", e.target.value)}
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="label">自己評価</label>
+            <StarRating
+              value={values.rating}
+              onChange={(n) => update("rating", n)}
+            />
+          </div>
+        </>
+      )}
+
       <div className="sm:col-span-2">
         <label className="label">テイスティングノート</label>
         <textarea
@@ -167,6 +322,58 @@ export function PurchaseForm({ initial, onSubmit, onCancel }: Props) {
           {initial ? "更新する" : "追加する"}
         </button>
       </div>
+
+      <SuggestionList id="suggest-roasters" values={suggestions.roasters} />
+      <SuggestionList id="suggest-bean-names" values={suggestions.beanNames} />
+      <SuggestionList id="suggest-varieties" values={suggestions.varieties} />
+      <SuggestionList id="suggest-farms" values={suggestions.farms} />
     </form>
+  );
+}
+
+function SuggestionList({ id, values }: { id: string; values: string[] }) {
+  if (values.length === 0) return null;
+  return (
+    <datalist id={id}>
+      {values.map((v) => (
+        <option key={v} value={v} />
+      ))}
+    </datalist>
+  );
+}
+
+function StarRating({ value, onChange }: { value: number; onChange: (n: number) => void }) {
+  return (
+    <div className="flex items-center gap-1" role="radiogroup" aria-label="自己評価">
+      {[1, 2, 3, 4, 5].map((n) => {
+        const filled = n <= value;
+        return (
+          <button
+            key={n}
+            type="button"
+            role="radio"
+            aria-checked={value === n}
+            aria-label={`${n} つ星`}
+            className={`text-2xl leading-none transition ${
+              filled
+                ? "text-amber-500"
+                : "text-stone-300 hover:text-amber-300 dark:text-stone-600 dark:hover:text-amber-400"
+            }`}
+            onClick={() => onChange(value === n ? 0 : n)}
+          >
+            {filled ? "★" : "☆"}
+          </button>
+        );
+      })}
+      {value > 0 && (
+        <button
+          type="button"
+          className="ml-2 text-xs text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200"
+          onClick={() => onChange(0)}
+        >
+          クリア
+        </button>
+      )}
+    </div>
   );
 }
