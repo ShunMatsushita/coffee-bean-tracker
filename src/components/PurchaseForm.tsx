@@ -213,7 +213,7 @@ export function PurchaseForm({ initial, suggestions = EMPTY_SUGGESTIONS, onSubmi
       <div className="sm:col-span-2">
         <button
           type="button"
-          className="text-xs font-medium text-coffee-600 hover:text-coffee-700"
+          className="text-xs font-medium text-coffee-600 hover:text-coffee-700 dark:text-coffee-200 dark:hover:text-coffee-100"
           onClick={() => setShowDetail((s) => !s)}
           aria-expanded={showDetail}
         >
@@ -355,7 +355,9 @@ function StarRating({ value, onChange }: { value: number; onChange: (n: number) 
             aria-checked={value === n}
             aria-label={`${n} つ星`}
             className={`text-2xl leading-none transition ${
-              filled ? "text-amber-500" : "text-stone-300 hover:text-amber-300"
+              filled
+                ? "text-amber-500"
+                : "text-stone-300 hover:text-amber-300 dark:text-stone-600 dark:hover:text-amber-400"
             }`}
             onClick={() => onChange(value === n ? 0 : n)}
           >
@@ -366,7 +368,7 @@ function StarRating({ value, onChange }: { value: number; onChange: (n: number) 
       {value > 0 && (
         <button
           type="button"
-          className="ml-2 text-xs text-stone-500 hover:text-stone-700"
+          className="ml-2 text-xs text-stone-500 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200"
           onClick={() => onChange(0)}
         >
           クリア

@@ -22,33 +22,33 @@ export function Stats({ purchases }: Props) {
   return (
     <section className="grid gap-3 sm:grid-cols-4">
       <div className="card">
-        <p className="text-xs text-stone-500">記録数</p>
-        <p className="text-xl font-semibold text-stone-800">{total}</p>
+        <p className="text-xs text-stone-500 dark:text-stone-400">記録数</p>
+        <p className="text-xl font-semibold text-stone-800 dark:text-stone-100">{total}</p>
       </div>
       <div className="card">
-        <p className="text-xs text-stone-500">合計</p>
-        <p className="text-xl font-semibold text-stone-800">{totalGrams.toLocaleString()}g</p>
+        <p className="text-xs text-stone-500 dark:text-stone-400">合計</p>
+        <p className="text-xl font-semibold text-stone-800 dark:text-stone-100">{totalGrams.toLocaleString()}g</p>
       </div>
       <div className="card">
-        <p className="text-xs text-stone-500">国の数</p>
-        <p className="text-xl font-semibold text-stone-800">{countries}</p>
+        <p className="text-xs text-stone-500 dark:text-stone-400">国の数</p>
+        <p className="text-xl font-semibold text-stone-800 dark:text-stone-100">{countries}</p>
       </div>
       <div className="card">
-        <p className="text-xs text-stone-500">ロースター数</p>
-        <p className="text-xl font-semibold text-stone-800">{roasters}</p>
+        <p className="text-xs text-stone-500 dark:text-stone-400">ロースター数</p>
+        <p className="text-xl font-semibold text-stone-800 dark:text-stone-100">{roasters}</p>
       </div>
       {topCountries.length > 0 && (
         <div className="card sm:col-span-4">
-          <p className="mb-2 text-xs text-stone-500">よく買う国 (Top 5)</p>
+          <p className="mb-2 text-xs text-stone-500 dark:text-stone-400">よく買う国 (Top 5)</p>
           <ul className="flex flex-wrap gap-2">
             {topCountries.map(([code, n]) => {
               const c = getCountry(code);
               return (
                 <li
                   key={code}
-                  className="rounded-full bg-coffee-50 px-3 py-1 text-xs text-coffee-700"
+                  className="rounded-full bg-coffee-50 px-3 py-1 text-xs text-coffee-700 dark:bg-coffee-700/30 dark:text-coffee-100"
                 >
-                  {c.flag} {c.name} <span className="text-coffee-500">×{n}</span>
+                  {c.flag} {c.name} <span className="text-coffee-500 dark:text-coffee-200">×{n}</span>
                 </li>
               );
             })}

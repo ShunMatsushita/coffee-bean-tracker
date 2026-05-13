@@ -19,13 +19,13 @@ export function Modal({ open, title, onClose, children }: Props) {
 
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/50 p-4">
-      <div className="w-full max-w-xl rounded-lg bg-white shadow-xl">
-        <div className="flex items-center justify-between border-b border-stone-200 px-5 py-3">
-          <h2 className="text-base font-semibold text-stone-800">{title}</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/50 p-4 dark:bg-black/70">
+      <div className="w-full max-w-xl rounded-lg bg-white shadow-xl dark:bg-stone-800">
+        <div className="flex items-center justify-between border-b border-stone-200 px-5 py-3 dark:border-stone-700">
+          <h2 className="text-base font-semibold text-stone-800 dark:text-stone-100">{title}</h2>
           <button
             type="button"
-            className="text-stone-500 hover:text-stone-800"
+            className="text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-stone-100"
             onClick={onClose}
             aria-label="閉じる"
           >

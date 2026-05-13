@@ -15,6 +15,7 @@ import { PurchaseCard } from "./components/PurchaseCard";
 import { PurchaseForm, type PurchaseFormValues } from "./components/PurchaseForm";
 import { Modal } from "./components/Modal";
 import { Stats } from "./components/Stats";
+import { ThemeToggle } from "./components/ThemeToggle";
 
 type SortKey = "date-desc" | "date-asc" | "grams-desc" | "grams-asc";
 
@@ -161,10 +162,10 @@ function App() {
     <div className="mx-auto max-w-5xl px-4 py-6 sm:py-10">
       <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold text-coffee-700">☕ Coffee Bean Tracker</h1>
-          <p className="text-xs text-stone-500">買ったコーヒー豆を記録しよう</p>
+          <h1 className="text-2xl font-semibold text-coffee-700 dark:text-coffee-200">☕ Coffee Bean Tracker</h1>
+          <p className="text-xs text-stone-500 dark:text-stone-400">買ったコーヒー豆を記録しよう</p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             className="btn-primary"
@@ -185,6 +186,7 @@ function App() {
           >
             ⬆ インポート
           </button>
+          <ThemeToggle />
           <input
             ref={fileInputRef}
             type="file"
@@ -247,7 +249,7 @@ function App() {
 
       <section className="mt-4">
         {filtered.length === 0 ? (
-          <div className="card text-center text-sm text-stone-500">
+          <div className="card text-center text-sm text-stone-500 dark:text-stone-400">
             該当する記録がありません
           </div>
         ) : (
@@ -287,12 +289,12 @@ function App() {
       </Modal>
 
       {toast && (
-        <div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-md bg-stone-800 px-4 py-2 text-sm text-white shadow-lg">
+        <div className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-md bg-stone-800 px-4 py-2 text-sm text-white shadow-lg dark:bg-stone-700">
           {toast}
         </div>
       )}
 
-      <footer className="mt-12 text-center text-xs text-stone-400">
+      <footer className="mt-12 text-center text-xs text-stone-400 dark:text-stone-500">
         データはお使いのブラウザに保存されます。共有・バックアップにはエクスポート機能を使ってください。
       </footer>
     </div>
